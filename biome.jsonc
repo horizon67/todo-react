@@ -1,0 +1,11 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "formatter": {
+    "indentStyle": "space"
+  },
+  "files": {
+    "ignore": [
+      "src/routeTree.gen.ts" // TanStack Router が自動生成するファイルを除外
+    ]
+  }
+}

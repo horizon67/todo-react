@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: todo-react
+    working_dir: /usr/src/app
+    command: >
+      bash -c "echo 'starting...' & bun install && bun dev"
+    volumes:
+      - .:/usr/src/app
+      - app-node_modules:/usr/src/app/node_modules/
+    container_name: todo-react
+    ports:
+      - "8000:8000"
+    environment:
+      - TZ=Asia/Tokyo
+    env_file:
+      - .env.local
+    networks:
+      - app_network
+    tty: true
+
+volumes:
+  app-node_modules:
+    name: app-node_modules
+    driver: local
+
+networks:
+  app_network:
+    external: true
