@@ -1,15 +1,14 @@
-import { useState, useCallback } from 'react'
+import useSWR, { mutate } from 'swr'
 import { Task, TaskState } from '@/types'
 import { ENV } from '@/lib/env'
 
-export function useTasks() {
-  const [tasks, setTasks] = useState<Task[]>([])
+const TASKS_KEY = '/api/tasks'
 
-  const fetchTasks = useCallback(async () => {
+export function useTasks() {
+  const { data: tasks = [], isLoading } = useSWR<Task[]>(TASKS_KEY, async () => {
     const response = await fetch(`${ENV.VITE_API_URL}/tasks`)
-    const data = await response.json()
-    setTasks(data)
-  }, [])
+    return response.json()
+  })
 
   const createTask = async (content: string) => {
     await fetch(`${ENV.VITE_API_URL}/tasks`, {
@@ -17,6 +16,7 @@ export function useTasks() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content, state: TaskState.TODO }),
     })
+    await mutate(TASKS_KEY)
   }
 
   const updateTaskState = async (task: Task) => {
@@ -28,17 +28,19 @@ export function useTasks() {
         state: task.state === TaskState.TODO ? TaskState.DONE : TaskState.TODO 
       }),
     })
+    await mutate(TASKS_KEY)
   }
 
   const deleteTask = async (id: number) => {
     await fetch(`${ENV.VITE_API_URL}/tasks/${id}`, {
       method: 'DELETE',
     })
+    await mutate(TASKS_KEY)
   }
 
   return {
     tasks,
-    fetchTasks,
+    isLoading,
     createTask,
     updateTaskState,
     deleteTask,

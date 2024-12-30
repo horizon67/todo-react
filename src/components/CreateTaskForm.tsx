@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useTasks } from '@/hooks/useTasks'
 
-export function CreateTaskForm({ onRefresh }: { onRefresh: () => void }) {
+export function CreateTaskForm() {
   const [content, setContent] = useState('')
   const { createTask } = useTasks()
 
@@ -13,7 +13,6 @@ export function CreateTaskForm({ onRefresh }: { onRefresh: () => void }) {
 
     await createTask(content)
     setContent('')
-    onRefresh()
   }
 
   return (

@@ -1,21 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { TaskList } from '../../components/TaskList'
-import { CreateTaskForm } from '../../components/CreateTaskForm'
-import { useState } from 'react'
+import { CreateTaskForm } from '@/components/CreateTaskForm'
+import { TaskList } from '@/components/TaskList'
 
-function TasksPage() {
-  const [refresh, setRefresh] = useState(0)
-
-  const handleRefresh = () => {
-    setRefresh(prev => prev + 1)
-  }
-
+export function TasksPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">タスク一覧</h1>
       <div className="space-y-4">
-        <CreateTaskForm onRefresh={handleRefresh} />
-        <TaskList refresh={refresh} onRefresh={handleRefresh} />
+        <CreateTaskForm />
+        <TaskList />
       </div>
     </div>
   )

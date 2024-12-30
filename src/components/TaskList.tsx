@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import {
   Table,
   TableBody,
@@ -68,21 +67,15 @@ const columns = (handleComplete: (task: Task) => void, handleDelete: (id: number
   },
 ]
 
-export function TaskList({ refresh, onRefresh }: { refresh?: number, onRefresh: () => void }) {
-  const { tasks, fetchTasks, updateTaskState, deleteTask } = useTasks()
-
-  useEffect(() => {
-    fetchTasks()
-  }, [refresh, fetchTasks])
+export function TaskList() {
+  const { tasks, isLoading, updateTaskState, deleteTask } = useTasks()
 
   const handleComplete = async (task: Task) => {
     await updateTaskState(task)
-    onRefresh()
   }
 
   const handleDelete = async (id: number) => {
     await deleteTask(id)
-    onRefresh()
   }
 
   const table = useReactTable({
@@ -93,8 +86,7 @@ export function TaskList({ refresh, onRefresh }: { refresh?: number, onRefresh: 
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
-      </div>
+      {isLoading && <div>Loading...</div>}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
